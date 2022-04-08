@@ -6,11 +6,13 @@ import org.springframework.web.bind.annotation.*;
 import ovaphlow.pitchfork.spr.entity.User;
 import ovaphlow.pitchfork.spr.mapper.UserMapper;
 
-@RestController
-@RequestMapping("/api/simple")
+import java.util.List;
+
+@RestController // 控制器，处理客户端/浏览器发送的请求
+@RequestMapping("/api/simple") // 请求地址的前缀
 public class UserController {
 
-    @Autowired
+    @Autowired // 注入
     UserMapper userMapper;
 
     @RequestMapping(path = "/user", method = RequestMethod.GET)
