@@ -3,6 +3,9 @@ package ovaphlow.pitchfork.spr.entity;
 public class Document {
     Long id;
     String title;
+    String dept;
+    String timeBegin;
+    String timeEnd;
 
     public Long getId() {
         return id;
