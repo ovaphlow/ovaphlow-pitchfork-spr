@@ -1,5 +1,19 @@
 package ovaphlow.pitchfork.spr.entity;
 
+/*
+CREATE TABLE pitchfork."user" (
+	id bigserial NOT NULL,
+	dept_id int8 NOT NULL,
+	"name" varchar NOT NULL,
+	phone varchar NOT NULL,
+	"password" varchar NOT NULL,
+	salt varchar NOT NULL,
+	tag jsonb NOT NULL,
+	dept varchar NOT NULL,
+	CONSTRAINT user_pk PRIMARY KEY (id)
+);
+ */
+
 public class User {
     Long id;
     String name;
