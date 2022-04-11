@@ -15,7 +15,7 @@ public interface DocumentMapper {
 
     @Update("""
             update pitchfork.document 
-            set title = #{title},dept = #{dept},timeBegin = #{timeBegin},timeEnd = #{timeEnd}
+            set title = #{title}, dept = #{dept}, time_begin = #{timeBegin}, time_end = #{timeEnd}
             where id = #{id}
             """)
     void update(Document document);
@@ -31,8 +31,8 @@ public interface DocumentMapper {
     Document filterById(Long id);
 
     @Insert("""
-            insert into pitchfork.document (title,dept,timeBegin,timeEnd)
-                values (#{title},#{dept},#{timeBegin},#{timeEnd})
+            insert into pitchfork.document (title, dept, time_begin, time_end)
+                values (#{title}, #{dept}, #{timeBegin}, #{timeEnd})
             """)
     void save(Document data);
 
