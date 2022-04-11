@@ -14,7 +14,7 @@ public interface DocumentMapper {
     List<Document> filter(int skip, int take);
 
     @Update("""
-            update pitchfork.document 
+            update pitchfork.document
             set title = #{title}, dept = #{dept}, time_begin = #{timeBegin}, time_end = #{timeEnd}
             where id = #{id}
             """)
