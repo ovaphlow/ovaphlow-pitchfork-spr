@@ -7,6 +7,41 @@ public class Document {
     String timeBegin;
     String timeEnd;
 
+    @Override
+    public String toString() {
+        return "Document{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", dept='" + dept + '\'' +
+                ", timeBegin='" + timeBegin + '\'' +
+                ", timeEnd='" + timeEnd + '\'' +
+                '}';
+    }
+
+    public String getDept() {
+        return dept;
+    }
+
+    public void setDept(String dept) {
+        this.dept = dept;
+    }
+
+    public String getTimeBegin() {
+        return timeBegin;
+    }
+
+    public void setTimeBegin(String timeBegin) {
+        this.timeBegin = timeBegin;
+    }
+
+    public String getTimeEnd() {
+        return timeEnd;
+    }
+
+    public void setTimeEnd(String timeEnd) {
+        this.timeEnd = timeEnd;
+    }
+
     public Long getId() {
         return id;
     }
@@ -23,11 +58,4 @@ public class Document {
         this.title = title;
     }
 
-    @Override
-    public String toString() {
-        return "Document{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                '}';
-    }
 }
