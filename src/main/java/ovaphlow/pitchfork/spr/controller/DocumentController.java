@@ -7,7 +7,6 @@ import ovaphlow.pitchfork.spr.entity.Document;
 import ovaphlow.pitchfork.spr.mapper.DocumentMapper;
 
 import java.util.List;
-import java.util.function.DoublePredicate;
 
 @RestController
 @RequestMapping("/api/simple/biz")
