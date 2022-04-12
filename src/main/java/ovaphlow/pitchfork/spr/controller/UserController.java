@@ -26,4 +26,33 @@ public class UserController {
         userMapper.save(user);
         return ResponseEntity.status(201).build();
     }
+
+    @RequestMapping(path = "/user/{id}" ,method = RequestMethod.PUT)
+    public ResponseEntity update(@PathVariable("id") Long id ,@RequestBody User user){
+        user.setId(id);
+        userMapper.update(user);
+        return ResponseEntity.status(200).build();
+    }
+
+    @RequestMapping(path = "/user/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity remove(@PathVariable("id") Long id) {
+        userMapper.remove(id);
+        return ResponseEntity.status(200).build();
+    }
+
+    @RequestMapping(path = "user/login", method = RequestMethod.GET)
+    public ResponseEntity login(@RequestBody User user){
+
+       String name = user.getName();
+       String passWord = userMapper.login(name);
+
+       String passWord1 = user.getPassword();
+
+       if (passWord1.equals(passWord)){
+           return ResponseEntity.status(200).build();
+       }else {
+           return ResponseEntity.status(401).build();
+       }
+    }
+
 }
