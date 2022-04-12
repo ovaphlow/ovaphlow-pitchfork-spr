@@ -17,20 +17,22 @@ public interface UserMapper {
             """)
     List<User> filter(Long take, Long skip);
 
+    @Select("select * from pitchfork.user where id = #{id}")
+    User filterById(Long id);
+
     @Insert("""
-            insert into pitchfork.user (name, phone, dept, dept_id, password, salt, tag)
-                values (#{name}, #{phone}, #{dept}, #{deptId}, #{password}, #{salt}, #{tag}::jsonb)
+            insert into pitchfork.user (name, phone, dept, password, salt, tag)
+                values (#{name}, #{phone}, #{dept}, #{password}, #{salt}, #{tag}::jsonb)
             """)
     void save(User user);
-
 
     @Update("""
             update pitchfork.user
             set name = #{name}
-            , password = #{password}
-            , phone = #{phone}
-            , dept = #{dept}
-            , tag = #{tag}::jsonb
+                , password = #{password}
+                , phone = #{phone}
+                , dept = #{dept}
+                , tag = #{tag}::jsonb
             where id = #{id}
             """)
     void update(User user);
@@ -41,8 +43,8 @@ public interface UserMapper {
     void remove(Long id);
 
     @Select("""
-            select password from pitchfork.user where name = #{name}
+            select * from pitchfork.user where name = #{name}
             """)
-    String login(String name);
+    List<User> filterByName(String name);
 
 }

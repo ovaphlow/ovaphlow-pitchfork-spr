@@ -20,7 +20,6 @@ public class User {
     String password;
     String salt;
     String phone;
-    Long deptId;
     String dept;
     String tag;
 
@@ -64,14 +63,6 @@ public class User {
         this.phone = phone;
     }
 
-    public Long getDeptId() {
-        return deptId;
-    }
-
-    public void setDeptId(Long deptId) {
-        this.deptId = deptId;
-    }
-
     public String getDept() {
         return dept;
     }
@@ -96,7 +87,6 @@ public class User {
                 ", password='" + password + '\'' +
                 ", salt='" + salt + '\'' +
                 ", phone='" + phone + '\'' +
-                ", deptId=" + deptId +
                 ", dept='" + dept + '\'' +
                 ", tag='" + tag + '\'' +
                 '}';
