@@ -71,8 +71,8 @@ public class UserController {
         System.out.println(user);
         List<User> userList = userMapper.filterByName(user.getName());
         if (userList.size() > 0) return ResponseEntity.status(400).build();
-        Snowflake sfid = new Snowflake(1, 1, 1);
-        user.setId(sfid.nextId());
+        Snowflake flakeId = new Snowflake(1, 1, 1);
+        user.setId(flakeId.nextId());
         user.setSalt(SecureText.getSecureText());
         user.setPassword(ShaUtility.SHA256(user.getPassword() + user.getSalt()));
         user.setTag("[]");
