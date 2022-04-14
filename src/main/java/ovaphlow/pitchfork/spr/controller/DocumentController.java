@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ovaphlow.pitchfork.spr.entity.Document;
 import ovaphlow.pitchfork.spr.mapper.DocumentMapper;
+import ovaphlow.pitchfork.spr.utility.Snowflake;
 
 import java.util.List;
 
@@ -48,8 +49,11 @@ public class DocumentController {
     }
 
     @RequestMapping(path = "/document", method = RequestMethod.POST)
-    public ResponseEntity<Document> save(@RequestBody Document document) {
-        documentMapper.save(document);
+    public ResponseEntity<Document> save(@RequestBody Document body) {
+        Snowflake flakeId = new Snowflake(1, 1, 1);
+        body.setId(flakeId.nextId());
+        System.out.println(body);
+        documentMapper.save(body);
         return ResponseEntity.status(201).build();
     }
 

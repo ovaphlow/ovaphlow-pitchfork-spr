@@ -6,6 +6,7 @@ import ovaphlow.pitchfork.spr.entity.Setting;
 import ovaphlow.pitchfork.spr.mapper.SettingMapper;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +52,18 @@ public class SettingController {
             Setting setting = new Setting();
             setting.setRefId(refId);
             List<Setting> settingList = settingMapper.filterByRefId(setting);
+            return ResponseEntity.status(200).body(settingList);
+        } else if ("filterBy-tag".equals(option)) {
+            String tag = request.getParameter("tag");
+            try {
+                tag = URLDecoder.decode(tag, "utf-8");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Setting setting = new Setting();
+            setting.setTag(tag);
+            System.out.println(setting);
+            List<Setting> settingList = settingMapper.filterByTag(setting);
             return ResponseEntity.status(200).body(settingList);
         }
         return ResponseEntity.status(200).body(new ArrayList<>());

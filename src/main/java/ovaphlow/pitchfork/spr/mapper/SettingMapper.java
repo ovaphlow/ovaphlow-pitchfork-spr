@@ -39,6 +39,14 @@ public interface SettingMapper {
             """)
     List<Setting> filterByRefId(Setting setting);
 
+    @Select("""
+            select id, ref_id refId, ref1_id ref1Id, tag, detail
+            from pitchfork.setting
+            where tag @> #{tag}::jsonb
+            order by id desc
+            """)
+    List<Setting> filterByTag(Setting setting);
+
     @Insert("""
             insert into pitchfork.setting (ref_id, ref1_id, tag, detail)
                 values (#{refId}, #{ref1Id}, #{tag}::jsonb, #{detail}::jsonb)

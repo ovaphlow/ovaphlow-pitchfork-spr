@@ -62,13 +62,11 @@ public class UserController {
     @RequestMapping(path = "/user", method = RequestMethod.GET)
     public ResponseEntity<List<User>> filter(@RequestParam(value = "take", defaultValue = "10") Long take,
                                              @RequestParam(value = "skip", defaultValue = "0") Long skip) {
-        System.out.println(SecureText.getSecureText());
         return ResponseEntity.status(200).body(userMapper.filter(take, skip));
     }
 
     @RequestMapping(path = "/user", method = RequestMethod.POST)
     public ResponseEntity<String> filter(@RequestBody User user) {
-        System.out.println(user);
         List<User> userList = userMapper.filterByName(user.getName());
         if (userList.size() > 0) return ResponseEntity.status(400).build();
         Snowflake flakeId = new Snowflake(1, 1, 1);

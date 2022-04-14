@@ -9,13 +9,21 @@ import java.util.List;
 public interface DocumentMapper {
 //
     @Select("""
-            select * from pitchfork.document order by id desc limit #{take} offset #{skip}
+            select id, time_begin timeBegin, time_end timeEnd, train, title, tag, detail
+            from pitchfork.document
+            order by id desc
+            limit #{take} offset #{skip}
             """)
     List<Document> filter(int skip, int take);
 
     @Update("""
             update pitchfork.document
-            set title = #{title}, dept = #{dept}, time_begin = #{timeBegin}, time_end = #{timeEnd}
+            set time_begin = #{timeBegin}
+                , time_end = #{timeEnd}
+                , train = #{train}
+                , title = #{title}
+                , tag = #{tag}::jsonb
+                , detail = #{detail}::jsonb
             where id = #{id}
             """)
     void update(Document document);
@@ -26,13 +34,15 @@ public interface DocumentMapper {
     void remove(Long id);
 
     @Select("""
-            select * from pitchfork.document where id = #{id}
+            select id, time_begin timeBegin, time_end timeEnd, train, title, tag, detail
+            from pitchfork.document
+            where id = #{id}
             """)
     Document filterById(Long id);
 
     @Insert("""
-            insert into pitchfork.document (title, dept, time_begin, time_end)
-                values (#{title}, #{dept}, #{timeBegin}, #{timeEnd})
+            insert into pitchfork.document (id, time_begin, time_end, train, title, tag, detail)
+                values (#{id}, #{timeBegin}, #{timeEnd}, #{train}, #{title}, #{tag}::jsonb, #{detail}::jsonb)
             """)
     void save(Document data);
 
