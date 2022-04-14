@@ -15,7 +15,7 @@ CREATE TABLE pitchfork."user" (
  */
 
 public class User {
-    Long id;
+    long id;
     String name;
     String password;
     String salt;

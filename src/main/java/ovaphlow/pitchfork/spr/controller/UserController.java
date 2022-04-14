@@ -1,34 +1,38 @@
 package ovaphlow.pitchfork.spr.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ovaphlow.pitchfork.spr.entity.User;
 import ovaphlow.pitchfork.spr.mapper.UserMapper;
+import ovaphlow.pitchfork.spr.utility.SecureText;
+import ovaphlow.pitchfork.spr.utility.ShaUtility;
+import ovaphlow.pitchfork.spr.utility.Snowflake;
 
 import java.util.List;
 
-@RestController // 控制器，处理客户端/浏览器发送的请求
-@RequestMapping("/api/simple") // 请求地址的前缀
+@RestController
+@RequestMapping("/api/simple")
 public class UserController {
 
-    @Autowired // 注入
-    UserMapper userMapper;
+    private final UserMapper userMapper;
 
-    @RequestMapping(path = "/user", method = RequestMethod.GET)
-    public ResponseEntity<List<User>> filter(@RequestParam(value = "take", defaultValue = "10") Long take,
-                                             @RequestParam(value = "skip", defaultValue = "0") Long skip) {
-        return ResponseEntity.status(200).body(userMapper.filter(take, skip));
+    public UserController(UserMapper userMapper) {
+        this.userMapper = userMapper;
     }
 
-    @RequestMapping(path = "/user", method = RequestMethod.POST)
-    public ResponseEntity<String> filter(@RequestBody User user) {
-        List<User> userList = userMapper.filterByName(user.getName());
-        if (userList.size() > 0) return ResponseEntity.status(400).build();
-        user.setSalt("12345678");
-        user.setTag("{}");
-        userMapper.save(user);
-        return ResponseEntity.status(201).build();
+    @RequestMapping(path = "/user/login", method = RequestMethod.POST)
+    public ResponseEntity<User> login(@RequestBody User body) {
+        List<User> userList = userMapper.filterByName(body.getName());
+        if (userList.size() == 0) return ResponseEntity.status(401).build();
+        User user = userList.get(0);
+        String saltedPassword = ShaUtility.SHA256(body.getPassword() + user.getSalt());
+        if (user.getPassword().equals(saltedPassword)) {
+            user.setPassword(null);
+            user.setSalt(null);
+            return ResponseEntity.status(200).body(user);
+        } else {
+            return ResponseEntity.status(401).build();
+        }
     }
 
     @RequestMapping(path = "/user/{id}", method = RequestMethod.GET)
@@ -55,18 +59,24 @@ public class UserController {
         return ResponseEntity.status(200).build();
     }
 
-    @RequestMapping(path = "/user/login", method = RequestMethod.POST)
-    public ResponseEntity<User> login(@RequestBody User body) {
-        List<User> userList = userMapper.filterByName(body.getName());
-        if (userList.size() == 0) return ResponseEntity.status(401).build();
-        User user = userList.get(0);
-        if (user.getPassword().equals(body.getPassword())) {
-            user.setPassword(null);
-            user.setSalt(null);
-            return ResponseEntity.status(200).body(user);
-        } else {
-            return ResponseEntity.status(401).build();
-        }
+    @RequestMapping(path = "/user", method = RequestMethod.GET)
+    public ResponseEntity<List<User>> filter(@RequestParam(value = "take", defaultValue = "10") Long take,
+                                             @RequestParam(value = "skip", defaultValue = "0") Long skip) {
+        System.out.println(SecureText.getSecureText());
+        return ResponseEntity.status(200).body(userMapper.filter(take, skip));
     }
 
+    @RequestMapping(path = "/user", method = RequestMethod.POST)
+    public ResponseEntity<String> filter(@RequestBody User user) {
+        System.out.println(user);
+        List<User> userList = userMapper.filterByName(user.getName());
+        if (userList.size() > 0) return ResponseEntity.status(400).build();
+        Snowflake sfid = new Snowflake(1, 1, 1);
+        user.setId(sfid.nextId());
+        user.setSalt(SecureText.getSecureText());
+        user.setPassword(ShaUtility.SHA256(user.getPassword() + user.getSalt()));
+        user.setTag("[]");
+        userMapper.save(user);
+        return ResponseEntity.status(201).build();
+    }
 }

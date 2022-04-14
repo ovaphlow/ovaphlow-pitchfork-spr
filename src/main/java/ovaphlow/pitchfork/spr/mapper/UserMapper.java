@@ -21,8 +21,8 @@ public interface UserMapper {
     User filterById(Long id);
 
     @Insert("""
-            insert into pitchfork.user (name, phone, dept, password, salt, tag)
-                values (#{name}, #{phone}, #{dept}, #{password}, #{salt}, #{tag}::jsonb)
+            insert into pitchfork.user (id, name, phone, dept, password, salt, tag)
+                values (#{id}, #{name}, #{phone}, #{dept}, #{password}, #{salt}, #{tag}::jsonb)
             """)
     void save(User user);
 
