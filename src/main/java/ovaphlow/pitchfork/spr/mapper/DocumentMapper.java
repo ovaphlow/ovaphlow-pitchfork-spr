@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface DocumentMapper {
-//
+
     @Select("""
             select id, time_begin timeBegin, time_end timeEnd, train, title, tag, detail
             from pitchfork.document
@@ -15,6 +15,10 @@ public interface DocumentMapper {
             limit #{take} offset #{skip}
             """)
     List<Document> filter(int skip, int take);
+
+    @Select("""
+            """)
+    List<Document> filterByTimeRangeTrain(String timeBegin, String timeEnd, String train);
 
     @Update("""
             update pitchfork.document

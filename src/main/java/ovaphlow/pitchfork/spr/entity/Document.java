@@ -8,19 +8,12 @@ public class Document {
     String title;
     String tag;
     String detail;
-
-    @Override
-    public String toString() {
-        return "Document{" +
-                "id=" + id +
-                ", train='" + train + '\'' +
-                ", timeBegin='" + timeBegin + '\'' +
-                ", timeEnd='" + timeEnd + '\'' +
-                ", title='" + title + '\'' +
-                ", tag='" + tag + '\'' +
-                ", detail='" + detail + '\'' +
-                '}';
-    }
+    String approve;
+    String review;
+    String sub01;
+    String sub02;
+    String sub03;
+    String sub04;
 
     public Long getId() {
         return id;
@@ -76,5 +69,72 @@ public class Document {
 
     public void setDetail(String detail) {
         this.detail = detail;
+    }
+
+    public String getApprove() {
+        return approve;
+    }
+
+    public void setApprove(String approve) {
+        this.approve = approve;
+    }
+
+    public String getReview() {
+        return review;
+    }
+
+    public void setReview(String review) {
+        this.review = review;
+    }
+
+    public String getSub01() {
+        return sub01;
+    }
+
+    public void setSub01(String sub01) {
+        this.sub01 = sub01;
+    }
+
+    public String getSub02() {
+        return sub02;
+    }
+
+    public void setSub02(String sub02) {
+        this.sub02 = sub02;
+    }
+
+    public String getSub03() {
+        return sub03;
+    }
+
+    public void setSub03(String sub03) {
+        this.sub03 = sub03;
+    }
+
+    public String getSub04() {
+        return sub04;
+    }
+
+    public void setSub04(String sub04) {
+        this.sub04 = sub04;
+    }
+
+    @Override
+    public String toString() {
+        return "Document{" +
+                "id=" + id +
+                ", train='" + train + '\'' +
+                ", timeBegin='" + timeBegin + '\'' +
+                ", timeEnd='" + timeEnd + '\'' +
+                ", title='" + title + '\'' +
+                ", tag='" + tag + '\'' +
+                ", detail='" + detail + '\'' +
+                ", approve='" + approve + '\'' +
+                ", review='" + review + '\'' +
+                ", sub01='" + sub01 + '\'' +
+                ", sub02='" + sub02 + '\'' +
+                ", sub03='" + sub03 + '\'' +
+                ", sub04='" + sub04 + '\'' +
+                '}';
     }
 }
