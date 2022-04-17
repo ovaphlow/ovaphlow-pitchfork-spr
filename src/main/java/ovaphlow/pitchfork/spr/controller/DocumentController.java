@@ -52,7 +52,8 @@ public class DocumentController {
             String train = request.getParameter("train");
             String timeBegin = request.getParameter("timeBegin");
             String timeEnd = request.getParameter("timeEnd");
-            return ResponseEntity.status(200).build();
+            List<Document> result = documentMapper.filterByTimeRangeTrain(timeBegin,timeEnd,train);
+            return ResponseEntity.status(200).body(result);
         }
         return ResponseEntity.status(200).build();
     }
