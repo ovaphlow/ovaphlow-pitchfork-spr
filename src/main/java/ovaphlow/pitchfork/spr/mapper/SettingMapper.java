@@ -20,9 +20,6 @@ public interface SettingMapper {
             """)
     void update(Setting setting);
 
-    @Delete("delete from pitchfork.setting where id = #{id}")
-    void remove(Long id);
-
     @Select("""
             select id, ref_id refId, ref1_id ref1Id, tag, detail
             from pitchfork.setting
@@ -30,6 +27,14 @@ public interface SettingMapper {
             limit #{take} offset #{skip}
             """)
     List<Setting> filter(Long take, Long skip);
+
+    @Select("""
+            select id, ref_id refId, ref1_id ref1Id, tag, detail
+            from pitchfork.setting
+            where detail @> #{detail}::jsonb
+            order by id desc
+            """)
+    List<Setting> filterByDetail(String detail);
 
     @Select("""
             select id, ref_id refId, ref1_id ref1Id, tag, detail
@@ -46,6 +51,9 @@ public interface SettingMapper {
             order by id desc
             """)
     List<Setting> filterByTag(Setting setting);
+
+    @Delete("delete from pitchfork.setting where id = #{id}")
+    void remove(Long id);
 
     @Insert("""
             insert into pitchfork.setting (ref_id, ref1_id, tag, detail)

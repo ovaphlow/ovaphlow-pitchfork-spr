@@ -7,6 +7,7 @@ import ovaphlow.pitchfork.spr.mapper.SettingMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,16 +48,24 @@ public class SettingController {
         if ("".equals(option)) {
             List<Setting> settingList = settingMapper.filter(take, skip);
             return ResponseEntity.status(200).body(settingList);
-        } else if ("filterBy-refId".equals(option)) {
+        }
+        if ("filterBy-detail".equals(option)) {
+            // &detail={"content":"班组"}
+            String detail = request.getParameter("detail");
+            List<Setting> settingList = settingMapper.filterByDetail(detail);
+            return ResponseEntity.status(200).body(settingList);
+        }
+        if ("filterBy-refId".equals(option)) {
             Long refId = Long.parseLong(request.getParameter("refId"), 10);
             Setting setting = new Setting();
             setting.setRefId(refId);
             List<Setting> settingList = settingMapper.filterByRefId(setting);
             return ResponseEntity.status(200).body(settingList);
-        } else if ("filterBy-tag".equals(option)) {
+        }
+        if ("filterBy-tag".equals(option)) {
             String tag = request.getParameter("tag");
             try {
-                tag = URLDecoder.decode(tag, "utf-8");
+                tag = URLDecoder.decode(tag, StandardCharsets.UTF_8);
             } catch (Exception e) {
                 e.printStackTrace();
             }
