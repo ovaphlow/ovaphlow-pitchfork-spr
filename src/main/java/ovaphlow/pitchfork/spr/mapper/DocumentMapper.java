@@ -35,7 +35,7 @@ public interface DocumentMapper {
                 , review = #{review}::jsonb
                 , sub01 = #{sub01}::jsonb
                 , sub02 = #{sub02}::jsonb
-                , sub03 = #{sub03}::jsonbz
+                , sub03 = #{sub03}::jsonb
                 , sub04 = #{sub04}::jsonb
             where id = #{id}
             """)
