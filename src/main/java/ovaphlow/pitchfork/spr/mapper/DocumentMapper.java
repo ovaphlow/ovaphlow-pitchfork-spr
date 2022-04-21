@@ -25,18 +25,18 @@ public interface DocumentMapper {
 
     @Update("""
             update pitchfork.document
-            set time_begin = #{timeBegin}
+            set   time_begin = #{timeBegin}
                 , time_end = #{timeEnd}
                 , train = #{train}
                 , title = #{title}
                 , tag = #{tag}::jsonb
                 , detail = #{detail}::jsonb
-                , #{approve}::jsonb
-                , #{review}::jsonb
-                , #{sub01}::jsonb
-                , #{sub02}::jsonb
-                , #{sub03}::jsonb
-                , #{sub04}::jsonb
+                , approve = #{approve}::jsonb
+                , review = #{review}::jsonb
+                , sub01 = #{sub01}::jsonb
+                , sub02 = #{sub02}::jsonb
+                , sub03 = #{sub03}::jsonbz
+                , sub04 = #{sub04}::jsonb
             where id = #{id}
             """)
     void update(Document document);
@@ -60,4 +60,8 @@ public interface DocumentMapper {
             """)
     void save(Document data);
 
+    @Select("""
+            select *, time_begin timeBegin, time_end timeEnd from pitchfork.document where id = #{id} and title = #{title}
+            """)
+    Document filterByIdTitle(Long id,String title);
 }
