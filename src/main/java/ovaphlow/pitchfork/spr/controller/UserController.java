@@ -1,9 +1,11 @@
 package ovaphlow.pitchfork.spr.controller;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ovaphlow.pitchfork.spr.entity.User;
+
 import ovaphlow.pitchfork.spr.mapper.UserMapper;
 import ovaphlow.pitchfork.spr.utility.SecureText;
 import ovaphlow.pitchfork.spr.utility.ShaUtility;
@@ -23,6 +25,7 @@ public class UserController {
 
     @RequestMapping(path = "/user/login", method = RequestMethod.POST)
     public ResponseEntity<User> login(@RequestBody User body) {
+
         List<User> userList = userMapper.filterByName(body.getName());
         if (userList.size() == 0) return ResponseEntity.status(401).build();
         User user = userList.get(0);
