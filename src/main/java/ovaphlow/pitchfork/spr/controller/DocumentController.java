@@ -72,4 +72,11 @@ public class DocumentController {
         return ResponseEntity.status(201).build();
     }
 
+
+    @RequestMapping(path = "/document/{id}/{title}", method = RequestMethod.GET)
+    public ResponseEntity<Document> get1(@PathVariable("id") Long id,@PathVariable("title") String title){
+        Document result = documentMapper.filterByIdTitle(id,title);
+        return ResponseEntity.status(200).body(result);
+    }
+
 }

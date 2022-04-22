@@ -25,7 +25,7 @@ public interface DocumentMapper {
 
     @Update("""
             update pitchfork.document
-            set time_begin = #{timeBegin}
+            set   time_begin = #{timeBegin}
                 , time_end = #{timeEnd}
                 , train = #{train}
                 , title = #{title}
@@ -60,4 +60,8 @@ public interface DocumentMapper {
             """)
     void save(Document data);
 
+    @Select("""
+            select *, time_begin timeBegin, time_end timeEnd from pitchfork.document where id = #{id} and title = #{title}
+            """)
+    Document filterByIdTitle(Long id,String title);
 }
