@@ -19,12 +19,6 @@ public class DocumentController {
         this.documentMapper = documentMapper;
     }
 
-    @RequestMapping(path = "/document/{id}/{title}", method = RequestMethod.GET)
-    public ResponseEntity<Document> getByIdTitle() {
-        //
-        return ResponseEntity.status(200).build();
-    }
-
     @RequestMapping(path = "/document/{id}", method = RequestMethod.GET)
     public ResponseEntity<Document> get(@PathVariable("id") Long id) {
         Document result = documentMapper.filterById(id);
