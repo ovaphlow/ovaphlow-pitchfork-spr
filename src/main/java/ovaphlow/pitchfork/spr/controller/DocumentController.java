@@ -42,7 +42,6 @@ public class DocumentController {
 
 
     @RequestMapping(path = "/document/{id}", method = RequestMethod.GET)
-    @Cacheable(value = "Document" , key = "#root.method.name")
     public ResponseEntity<Document> getById(@PathVariable("id") Long id) {
         Document result = documentMapper.filterById(id);
 
