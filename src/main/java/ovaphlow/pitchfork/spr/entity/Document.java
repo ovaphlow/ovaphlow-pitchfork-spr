@@ -1,6 +1,8 @@
 package ovaphlow.pitchfork.spr.entity;
 
-public class Document {
+import java.io.Serializable;
+
+public class Document implements Serializable {
     Long id;
     String train;
     String timeBegin;
@@ -137,4 +139,7 @@ public class Document {
                 ", sub04='" + sub04 + '\'' +
                 '}';
     }
+
+
+
 }

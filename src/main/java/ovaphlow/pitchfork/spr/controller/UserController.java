@@ -4,6 +4,7 @@ package ovaphlow.pitchfork.spr.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ovaphlow.pitchfork.spr.AuthorizationService;
 import ovaphlow.pitchfork.spr.entity.User;
 
 import ovaphlow.pitchfork.spr.mapper.UserMapper;
@@ -33,6 +34,7 @@ public class UserController {
         if (user.getPassword().equals(saltedPassword)) {
             user.setPassword(null);
             user.setSalt(null);
+            String jwt = AuthorizationService.createToken(String.valueOf(user.getId()),user.getName(),user.getPhone());
             return ResponseEntity.status(200).body(user);
         } else {
             return ResponseEntity.status(401).build();
