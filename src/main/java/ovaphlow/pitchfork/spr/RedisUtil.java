@@ -20,6 +20,7 @@ public class RedisUtil {
     }
 
     //向redis插入值
+    @SuppressWarnings("unchecked")
     public  boolean set(final String key,Object value){
         boolean result = false;
         try{
@@ -30,5 +31,4 @@ public class RedisUtil {
         }
         return  result;
     }
-
 }

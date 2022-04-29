@@ -1,18 +1,16 @@
 package ovaphlow.pitchfork.spr.controller;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ovaphlow.pitchfork.spr.AuthorizationService;
 import ovaphlow.pitchfork.spr.entity.User;
-
 import ovaphlow.pitchfork.spr.mapper.UserMapper;
 import ovaphlow.pitchfork.spr.utility.SecureText;
 import ovaphlow.pitchfork.spr.utility.ShaUtility;
 import ovaphlow.pitchfork.spr.utility.Snowflake;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/simple")
@@ -25,8 +23,7 @@ public class UserController {
     }
 
     @RequestMapping(path = "/user/login", method = RequestMethod.POST)
-    public ResponseEntity<User> login(@RequestBody User body) {
-
+    public ResponseEntity<Map<String, Object>> login(@RequestBody User body) {
         List<User> userList = userMapper.filterByName(body.getName());
         if (userList.size() == 0) return ResponseEntity.status(401).build();
         User user = userList.get(0);
@@ -34,11 +31,16 @@ public class UserController {
         if (user.getPassword().equals(saltedPassword)) {
             user.setPassword(null);
             user.setSalt(null);
-            String jwt = AuthorizationService.createToken(String.valueOf(user.getId()),user.getName(),user.getPhone());
-            return ResponseEntity.status(200).body(user);
+            String jwt = AuthorizationService.createToken(String.valueOf(user.getId()), user.getName(), user.getPhone());
+            return ResponseEntity.status(200).body(Map.of("user", user, "token", jwt));
         } else {
             return ResponseEntity.status(401).build();
         }
+    }
+
+    @RequestMapping(path = "/user/check", method = RequestMethod.GET)
+    public ResponseEntity<String> check(@RequestParam(value = "token", defaultValue = "") String token) {
+        return ResponseEntity.status(200).body("");
     }
 
     @RequestMapping(path = "/user/{id}", method = RequestMethod.GET)
@@ -79,11 +81,11 @@ public class UserController {
         user.setId(flakeId.nextId());
         user.setSalt(SecureText.getSecureText());
         user.setPassword(ShaUtility.SHA256(user.getPassword() + user.getSalt()));
+        System.out.println(user);
         user.setTag("[]");
         userMapper.save(user);
         return ResponseEntity.status(201).build();
     }
-
 
 
 }

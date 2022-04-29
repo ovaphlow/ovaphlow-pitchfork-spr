@@ -92,7 +92,7 @@ public class DocumentController {
     @RequestMapping(path = "/upload", method = RequestMethod.POST)
     public String upload(@RequestBody MultipartFile file) throws IOException {
         String oldName = file.getOriginalFilename();
-        String path = "D:\\upload_files\\";
+        String path = "c:\\users\\ovaphlow\\desktop\\";
         String filePath = path + oldName;
         File newFile = new File(filePath);
         file.transferTo(newFile);

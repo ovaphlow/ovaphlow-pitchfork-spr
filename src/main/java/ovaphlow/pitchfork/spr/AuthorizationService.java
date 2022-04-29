@@ -10,30 +10,25 @@ import org.jose4j.jwt.NumericDate;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.jwt.consumer.JwtConsumer;
 import org.jose4j.jwt.consumer.JwtConsumerBuilder;
-import org.jose4j.keys.HmacKey;
 import org.jose4j.lang.JoseException;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
 import java.security.PrivateKey;
 import java.util.UUID;
 
 @Service
 public class AuthorizationService {
 
+    public static long accessTokenExpirationTime = 60 * 60 * 24;
     /**
      * keyId,公钥,私钥 都是用 createKeyPair 方法生成
      */
-    private static String keyId = "fa677d525c0e4ee485a61543937794af";
-    private static String privateKeyStr = "{\"kty\":\"RSA\",\"kid\":\"fa677d525c0e4ee485a61543937794af\",\"alg\":\"RS256\",\"n\":\"ki6NKW2ow53FBjWf21xNGF0v-Fzv9R4-vu5tz7LHz4vZ7TE2Lp7Xx0N2vFIH-HLZPLfAYW35W5iV29sW_MkbhVlh6f0q4AeCIeYrVjBGbcYTK5g-Sb8i9sO78DkGivryKTU4tUnOjqar2bfobwXScFhAgc4-BjIcvZ9V8LEzcAW76he500-sqekXqvYv7LbxIMlbadGEwbBqjscE83hiYjk1KSFrEeNWKP6E0X_cHVGEEGys8IKlBcfwOOCgaJ0sCFxvN3M54V33jSUknFzHAi1qJRsOI87-Fk1oYS-aniQOTfm5y5x1syTIgWEX9JvXCQgTxjp2kMItuoL2G2faoQ\",\"e\":\"AQAB\",\"d\":\"OmSUCN-AEZv9LwzOrW6CcWAQIHLne4-4WsadYOE2hcaEqAYHcboL0dI2JOXTv0AJXQK9u22VtSwPeMJcvV-MOclJnpF9xf3Z0rbByuz_xSvhToHDJ-xNCCuJ8FynK28wuptC6s_vzfXwIckf9PFrbWsjYXbEOe9cobZ7Ould9boHkEq-x0eKkDFfcQbevuQeM54FCk5FGl_D4wpbuqudZiT8FYCJPO7m-MTnND6xzdEVuApuQUPCjAin34ygp9QPk2VfQaM1z-ZHchTaXtsv5gyLwu3bqA91vugmrtGuSBG8pFaN6mYL_ivt1Q_7QDLqXZ5_WBhkoXO5DZ4-6ApLvQ\",\"p\":\"58fTzOMjU1zJ42ZdUkJjSpRlZXdlWx3ILStrvVw7kCHH1iBZ4Lckd7SdqJ9DUfdIBFTNPaAKfDqpoz7fWOUZyyUpy7_8qaDagFi53pAjuCGUuKnOV5hbSPBIOvGi9iTHwLNz6Om5eRV6lBXoTRJgT7g8u88HeSyl29RmYt-N7rs\",\"q\":\"oXTxPC0BFDxpFjk2Jpuj6hBkioD3Kiv7HEJjxRoOL3TEAAc3811f7V7bO5FWK2L_2g8I5YiZhsyh0SyxjPBfuIzcbAfGSTAsFqKiIOGZ7fqiFTOV319FJIkcMOrT2dbvGxNeGgTJpWB1vcX6C8i3ytzPFto1H9Bl3xAPVFflHFM\",\"dp\":\"RU-eaLCryav_u37K_WRY6N6Di9oudxbq24cWiuPf8_QGHGREPEzIHPvoAZrOuN4nrRPm5DzNpeStAeI1TBIGqpcMbp-U4Oz3KlZeDs4vwEpafPZafBtVgPRJxUapIs5Q5bFEQixSiIEBzPLYKuQJ5Q0FLGx2oafWWWykyYBsoy0\",\"dq\":\"SS2_yQ581rcqyi_UI1uXx5b2evBJFowonH5ayhMtKsU5sOmUqnE_8U50_2K4M6IDZMo7tg1byIUnMq-XKdIpEHSH008SyElVMk00PsMCCaL3o7Rl0YBUzmJ2rJVCwBFy_kqg9BoHazV1KDZ7RqwK4Z-DHVB5k5nZEmktCYVtCpE\",\"qi\":\"jDbVP3xGaYx2wgAGJT7KNjdoC4dYbl5ajp9saRCgAih3TYr1CjZSrLRm9L90UukgwajU0pHaffP74epVx0RBhnS5GtZhCoGitpLwYSDkZ9qTMTVnFPHrg6M1OYEEXjZ_UKlnYCrzrDe6tfHcO1UTzMzsuOgHjRAV7IS6ImfzwVw\"}";
-    private static String publicKeyStr = "{\"kty\":\"RSA\",\"kid\":\"fa677d525c0e4ee485a61543937794af\",\"alg\":\"RS256\",\"n\":\"ki6NKW2ow53FBjWf21xNGF0v-Fzv9R4-vu5tz7LHz4vZ7TE2Lp7Xx0N2vFIH-HLZPLfAYW35W5iV29sW_MkbhVlh6f0q4AeCIeYrVjBGbcYTK5g-Sb8i9sO78DkGivryKTU4tUnOjqar2bfobwXScFhAgc4-BjIcvZ9V8LEzcAW76he500-sqekXqvYv7LbxIMlbadGEwbBqjscE83hiYjk1KSFrEeNWKP6E0X_cHVGEEGys8IKlBcfwOOCgaJ0sCFxvN3M54V33jSUknFzHAi1qJRsOI87-Fk1oYS-aniQOTfm5y5x1syTIgWEX9JvXCQgTxjp2kMItuoL2G2faoQ\",\"e\":\"AQAB\"}";
-
-    public static long accessTokenExpirationTime = 60 * 60 * 24;
+    private static final String keyId = "fa677d525c0e4ee485a61543937794af";
+    private static final String privateKeyStr = "{\"kty\":\"RSA\",\"kid\":\"fa677d525c0e4ee485a61543937794af\",\"alg\":\"RS256\",\"n\":\"ki6NKW2ow53FBjWf21xNGF0v-Fzv9R4-vu5tz7LHz4vZ7TE2Lp7Xx0N2vFIH-HLZPLfAYW35W5iV29sW_MkbhVlh6f0q4AeCIeYrVjBGbcYTK5g-Sb8i9sO78DkGivryKTU4tUnOjqar2bfobwXScFhAgc4-BjIcvZ9V8LEzcAW76he500-sqekXqvYv7LbxIMlbadGEwbBqjscE83hiYjk1KSFrEeNWKP6E0X_cHVGEEGys8IKlBcfwOOCgaJ0sCFxvN3M54V33jSUknFzHAi1qJRsOI87-Fk1oYS-aniQOTfm5y5x1syTIgWEX9JvXCQgTxjp2kMItuoL2G2faoQ\",\"e\":\"AQAB\",\"d\":\"OmSUCN-AEZv9LwzOrW6CcWAQIHLne4-4WsadYOE2hcaEqAYHcboL0dI2JOXTv0AJXQK9u22VtSwPeMJcvV-MOclJnpF9xf3Z0rbByuz_xSvhToHDJ-xNCCuJ8FynK28wuptC6s_vzfXwIckf9PFrbWsjYXbEOe9cobZ7Ould9boHkEq-x0eKkDFfcQbevuQeM54FCk5FGl_D4wpbuqudZiT8FYCJPO7m-MTnND6xzdEVuApuQUPCjAin34ygp9QPk2VfQaM1z-ZHchTaXtsv5gyLwu3bqA91vugmrtGuSBG8pFaN6mYL_ivt1Q_7QDLqXZ5_WBhkoXO5DZ4-6ApLvQ\",\"p\":\"58fTzOMjU1zJ42ZdUkJjSpRlZXdlWx3ILStrvVw7kCHH1iBZ4Lckd7SdqJ9DUfdIBFTNPaAKfDqpoz7fWOUZyyUpy7_8qaDagFi53pAjuCGUuKnOV5hbSPBIOvGi9iTHwLNz6Om5eRV6lBXoTRJgT7g8u88HeSyl29RmYt-N7rs\",\"q\":\"oXTxPC0BFDxpFjk2Jpuj6hBkioD3Kiv7HEJjxRoOL3TEAAc3811f7V7bO5FWK2L_2g8I5YiZhsyh0SyxjPBfuIzcbAfGSTAsFqKiIOGZ7fqiFTOV319FJIkcMOrT2dbvGxNeGgTJpWB1vcX6C8i3ytzPFto1H9Bl3xAPVFflHFM\",\"dp\":\"RU-eaLCryav_u37K_WRY6N6Di9oudxbq24cWiuPf8_QGHGREPEzIHPvoAZrOuN4nrRPm5DzNpeStAeI1TBIGqpcMbp-U4Oz3KlZeDs4vwEpafPZafBtVgPRJxUapIs5Q5bFEQixSiIEBzPLYKuQJ5Q0FLGx2oafWWWykyYBsoy0\",\"dq\":\"SS2_yQ581rcqyi_UI1uXx5b2evBJFowonH5ayhMtKsU5sOmUqnE_8U50_2K4M6IDZMo7tg1byIUnMq-XKdIpEHSH008SyElVMk00PsMCCaL3o7Rl0YBUzmJ2rJVCwBFy_kqg9BoHazV1KDZ7RqwK4Z-DHVB5k5nZEmktCYVtCpE\",\"qi\":\"jDbVP3xGaYx2wgAGJT7KNjdoC4dYbl5ajp9saRCgAih3TYr1CjZSrLRm9L90UukgwajU0pHaffP74epVx0RBhnS5GtZhCoGitpLwYSDkZ9qTMTVnFPHrg6M1OYEEXjZ_UKlnYCrzrDe6tfHcO1UTzMzsuOgHjRAV7IS6ImfzwVw\"}";
+    private static final String publicKeyStr = "{\"kty\":\"RSA\",\"kid\":\"fa677d525c0e4ee485a61543937794af\",\"alg\":\"RS256\",\"n\":\"ki6NKW2ow53FBjWf21xNGF0v-Fzv9R4-vu5tz7LHz4vZ7TE2Lp7Xx0N2vFIH-HLZPLfAYW35W5iV29sW_MkbhVlh6f0q4AeCIeYrVjBGbcYTK5g-Sb8i9sO78DkGivryKTU4tUnOjqar2bfobwXScFhAgc4-BjIcvZ9V8LEzcAW76he500-sqekXqvYv7LbxIMlbadGEwbBqjscE83hiYjk1KSFrEeNWKP6E0X_cHVGEEGys8IKlBcfwOOCgaJ0sCFxvN3M54V33jSUknFzHAi1qJRsOI87-Fk1oYS-aniQOTfm5y5x1syTIgWEX9JvXCQgTxjp2kMItuoL2G2faoQ\",\"e\":\"AQAB\"}";
 
     //jws创建token
-    public static String createToken(String id,String name,String phone) {
-
-
+    public static String createToken(String id, String name, String phone) {
         try {
             //Payload
             JwtClaims claims = new JwtClaims();
@@ -78,7 +73,33 @@ public class AuthorizationService {
         return null;
     }
 
+    /**
+     * 创建jwk keyId , 公钥 ，秘钥
+     */
+    public static void createKeyPair() {
+        String keyId = UUID.randomUUID().toString().replaceAll("-", "");
+        RsaJsonWebKey jwk = null;
+        try {
+            jwk = RsaJwkGenerator.generateJwk(2048);
+        } catch (JoseException e) {
+            e.printStackTrace();
+        }
+        jwk.setKeyId(keyId);
+        //采用的签名算法 RS256
+        jwk.setAlgorithm(AlgorithmIdentifiers.RSA_USING_SHA256);
+        String publicKey = jwk.toJson(RsaJsonWebKey.OutputControlLevel.PUBLIC_ONLY);
+        String privateKey = jwk.toJson(RsaJsonWebKey.OutputControlLevel.INCLUDE_PRIVATE);
 
+        System.out.println("keyId=" + keyId);
+        System.out.println();
+        System.out.println("公钥 publicKeyStr=" + publicKey);
+        System.out.println();
+        System.out.println("私钥 privateKeyStr=" + privateKey);
+    }
+
+    public static void main(String[] args) {
+        createKeyPair();
+    }
 
     /**
      * jws校验token
@@ -115,43 +136,13 @@ public class AuthorizationService {
                 System.out.println("token payload携带的自定义内容:用户账号account=" + account);
                 return account;
             }
-        }  catch (JoseException e) {
+        } catch (JoseException e) {
             e.printStackTrace();
-        }  catch (InvalidJwtException e) {
+        } catch (InvalidJwtException e) {
             e.printStackTrace();
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-
-    /**
-     * 创建jwk keyId , 公钥 ，秘钥
-     */
-    public static void createKeyPair(){
-        String keyId = UUID.randomUUID().toString().replaceAll("-", "");
-        RsaJsonWebKey jwk = null;
-        try {
-            jwk = RsaJwkGenerator.generateJwk(2048);
-        } catch (JoseException e) {
-            e.printStackTrace();
-        }
-        jwk.setKeyId(keyId);
-        //采用的签名算法 RS256
-        jwk.setAlgorithm(AlgorithmIdentifiers.RSA_USING_SHA256);
-        String publicKey = jwk.toJson(RsaJsonWebKey.OutputControlLevel.PUBLIC_ONLY);
-        String privateKey = jwk.toJson(RsaJsonWebKey.OutputControlLevel.INCLUDE_PRIVATE);
-
-        System.out.println("keyId="+keyId);
-        System.out.println();
-        System.out.println("公钥 publicKeyStr="+publicKey);
-        System.out.println();
-        System.out.println("私钥 privateKeyStr="+privateKey);
-    }
-
-    public static void main(String[] args){
-        createKeyPair();
-    }
 }
-
-
