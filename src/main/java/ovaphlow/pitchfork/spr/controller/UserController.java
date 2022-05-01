@@ -40,7 +40,11 @@ public class UserController {
 
     @RequestMapping(path = "/user/check", method = RequestMethod.GET)
     public ResponseEntity<String> check(@RequestParam(value = "token", defaultValue = "") String token) {
-        return ResponseEntity.status(200).body("");
+        String tokencheck = AuthorizationService.verifyToken(token);
+        if (tokencheck != null){
+            return ResponseEntity.status(200).body("token校验成功");
+        }
+        return ResponseEntity.status(401).body("token校验失败");
     }
 
     @RequestMapping(path = "/user/{id}", method = RequestMethod.GET)

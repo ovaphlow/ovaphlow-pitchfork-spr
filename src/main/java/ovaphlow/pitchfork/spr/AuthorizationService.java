@@ -108,33 +108,25 @@ public class AuthorizationService {
      * @return 返回 用户账号
      * @throws JoseException
      */
-    public String verifyToken(String token) {
+    public static String verifyToken(String token) {
         try {
             JwtConsumer consumer = new JwtConsumerBuilder()
                     .setRequireExpirationTime()
                     .setMaxFutureValidityInMinutes(5256000)
                     .setAllowedClockSkewInSeconds(30)
                     .setRequireSubject()
-                    //.setExpectedIssuer("")
                     .setExpectedAudience("YOUR_AUDIENCE")
-                    /*
-                    RsaJsonWebKey jwk = null;
-                    try {
-                        jwk = RsaJwkGenerator.generateJwk(2048);
-                        } catch (JoseException e) {
-                            e.printStackTrace();
-                        }
-                        jwk.setKeyId(keyId); */
-                    //.setVerificationKey(jwk.getPublicKey())
                     .setVerificationKey(new RsaJsonWebKey(JsonUtil.parseJson(publicKeyStr)).getPublicKey())
                     .build();
 
             JwtClaims claims = consumer.processToClaims(token);
             if (claims != null) {
-                System.out.println("认证通过！");
-                String account = (String) claims.getClaimValue("account");
-                System.out.println("token payload携带的自定义内容:用户账号account=" + account);
-                return account;
+//                System.out.println("Token confirm!");
+//                String id = (String) claims.getClaimValue("id");
+//                String name = (String) claims.getClaimValue("name");
+//                String phone = (String) claims.getClaimValue("phone");
+//                System.out.println("token payload:id,name,phone=" + id + name + phone);
+                return "1";
             }
         } catch (JoseException e) {
             e.printStackTrace();
