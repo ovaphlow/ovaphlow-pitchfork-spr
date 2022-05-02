@@ -1,3 +1,6 @@
+.metadata
+jdt.ls-java-project
+
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
