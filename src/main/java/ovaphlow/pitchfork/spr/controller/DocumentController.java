@@ -35,15 +35,12 @@ public class DocumentController {
 
     @RequestMapping(path = "/document/{id}", method = RequestMethod.GET)
     public ResponseEntity<Document> getById(@PathVariable("id") Long id) {
-//        Document result = documentMapper.filterById(id);
         String key = "document" + id;
         if (redisUtil.hasKey(key)) {
             document = (Document) redisUtil.get(key);
-//            System.out.println("search from cache");
         } else {
             document = documentMapper.filterById(id);
-//            System.out.println("search from database");
-            System.out.println(redisUtil.set(key, document) ? "success insert" : "error insert");
+            redisUtil.set(key, document);
         }
         return ResponseEntity.status(200).body(document);
     }
@@ -89,13 +86,5 @@ public class DocumentController {
         return ResponseEntity.status(201).build();
     }
 
-    @RequestMapping(path = "/upload", method = RequestMethod.POST)
-    public String upload(@RequestBody MultipartFile file) throws IOException {
-        String oldName = file.getOriginalFilename();
-        String path = "c:\\users\\ovaphlow\\desktop\\";
-        String filePath = path + oldName;
-        File newFile = new File(filePath);
-        file.transferTo(newFile);
-        return filePath;
-    }
+
 }
