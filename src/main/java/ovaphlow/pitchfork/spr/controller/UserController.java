@@ -11,6 +11,7 @@ import ovaphlow.pitchfork.spr.utility.Snowflake;
 
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/simple")
@@ -39,7 +40,8 @@ public class UserController {
     }
 
     @RequestMapping(path = "/user/check", method = RequestMethod.GET)
-    public ResponseEntity<String> check(@RequestParam(value = "token", defaultValue = "") String token) {
+    public ResponseEntity<String> check(HttpServletRequest request) {
+        String token = request.getHeader("Authorization").replace("Bearer: ", "");
         String tokencheck = AuthorizationService.verifyToken(token);
         if (tokencheck != null){
             return ResponseEntity.status(200).body("token校验成功");
@@ -79,6 +81,7 @@ public class UserController {
 
     @RequestMapping(path = "/user", method = RequestMethod.POST)
     public ResponseEntity<String> filter(@RequestBody User user) {
+        System.out.println(user);
         List<User> userList = userMapper.filterByName(user.getName());
         if (userList.size() > 0) return ResponseEntity.status(400).build();
         Snowflake flakeId = new Snowflake(1, 1, 1);
