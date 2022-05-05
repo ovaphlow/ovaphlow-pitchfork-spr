@@ -3,16 +3,15 @@ package ovaphlow.pitchfork.spr.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import ovaphlow.pitchfork.spr.RedisUtil;
 import ovaphlow.pitchfork.spr.entity.Document;
 import ovaphlow.pitchfork.spr.mapper.DocumentMapper;
 import ovaphlow.pitchfork.spr.utility.Snowflake;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/simple/biz")
@@ -86,5 +85,49 @@ public class DocumentController {
         return ResponseEntity.status(201).build();
     }
 
+    @RequestMapping(path = "/document/today", method = RequestMethod.GET)
+    public ResponseEntity<Long> CountNumberForDay() {
+        Date date =new Date();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = sdf.format(date);
+        Calendar cd=Calendar.getInstance();
+        try{
+            cd.setTime(sdf.parse(dateString));
+        }catch(ParseException e){
+            e.printStackTrace();
+        }
+        cd.add(Calendar.DATE,1);
+        String dateString2 = sdf.format(cd.getTime());
+        Long CountNumber = documentMapper.CountDataForDay(dateString , dateString2);
+        return ResponseEntity.status(200).body(CountNumber);
+    }
+
+    @RequestMapping(path = "/document/all", method = RequestMethod.GET)
+    public ResponseEntity<Long> CountNumberForAll() {
+        Long CountNumber = documentMapper.CountDataForAll();
+        return ResponseEntity.status(200).body(CountNumber);
+    }
+
+    @RequestMapping(path = "/document/working", method = RequestMethod.GET)
+    public ResponseEntity<Long> CountNumberForWorking() {
+        Long CountNumber = documentMapper.CountDataForWorking();
+        return ResponseEntity.status(200).body(CountNumber);
+    }
+
+    @RequestMapping(path = "/document/train", method = RequestMethod.GET)
+    public ResponseEntity<List<Map<String, Object>>> CountNumberFortrain() {
+        List<Map<String, Object>> Train = documentMapper.CountNumberForTrain();
+        return ResponseEntity.status(200).body(Train);
+    }
+
+    @RequestMapping(path = "/document/percent", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, Object>> CountPercent() {
+        Map<String, Object> CountPercent1 = documentMapper.CountPercent1();
+        Map<String, Object> CountPercent2 = documentMapper.CountPercent2();
+        Map<String, Object> CountPercent3 = documentMapper.CountPercent3();
+        CountPercent2.putAll(CountPercent3);
+        CountPercent2.putAll(CountPercent1);
+        return ResponseEntity.status(200).body(CountPercent2);
+    }
 
 }

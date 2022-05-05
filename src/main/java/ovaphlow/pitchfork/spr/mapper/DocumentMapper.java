@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.*;
 import ovaphlow.pitchfork.spr.entity.Document;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface DocumentMapper {
@@ -64,4 +65,57 @@ public interface DocumentMapper {
             select *, time_begin timeBegin, time_end timeEnd from pitchfork.document where id = #{id} and title = #{title}
             """)
     Document filterByIdTitle(Long id,String title);
+
+    @Select("""
+            select count(*) from pitchfork.document
+            where time_begin between #{timeBegin} and #{timeEnd}
+            """)
+    Long CountDataForDay(String timeBegin, String timeEnd);
+
+    @Select("""
+            select count(*) from pitchfork.document
+            """)
+    Long CountDataForAll();
+
+    @Select("""
+            select count(*) from pitchfork.document
+            where tag @> '["完成"]' = false
+            """)
+    Long CountDataForWorking();
+
+    @Select("""
+            select train, count(train) 数量 from pitchfork.document
+            group by train
+            """)
+    List<Map<String, Object>> CountNumberForTrain();
+
+    @Select("""
+            select count(*) 总数量
+            from pitchfork.document
+            """)
+    Map<String, Object> CountPercent1();
+
+    @Select("""
+            select count(*) 计划外作业数量 , 
+            concat(count(*) *100 / (select count(*) from pitchfork.document),'%') 计划外作业占比
+            from pitchfork.document
+            where tag @> '["计划外作业"]'
+            """)
+    Map<String, Object> CountPercent2();
+
+    @Select("""
+            select count(*) 计划内作业数量 , 
+            concat(count(*) *100 / (select count(*) from pitchfork.document),'%') 计划内作业占比
+            from pitchfork.document
+            where tag @> '["计划内作业"]'
+            """)
+    Map<String, Object> CountPercent3();
+
+//    @Select("""
+//            select count(*) 总数,
+//            round((select count(*) from pitchfork.document where tag @> '["计划内作业"]')/count(*)*100 ,3 )计划内作业
+//            from pitchfork.document
+//            """)
+//    List<Map<String, Object>> CountPercent();
+
 }
