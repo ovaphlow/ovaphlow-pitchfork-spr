@@ -19,7 +19,7 @@ import java.util.UUID;
 @Service
 public class AuthorizationService {
 
-    public static long accessTokenExpirationTime = 60 * 60 * 24;
+    public static long accessTokenExpirationTime = 60 * 60 * 24 * 7;
     /**
      * keyId,公钥,私钥 都是用 createKeyPair 方法生成
      */
