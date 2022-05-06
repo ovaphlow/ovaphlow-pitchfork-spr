@@ -9,9 +9,9 @@ import ovaphlow.pitchfork.spr.utility.SecureText;
 import ovaphlow.pitchfork.spr.utility.ShaUtility;
 import ovaphlow.pitchfork.spr.utility.Snowflake;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/simple")
@@ -43,7 +43,7 @@ public class UserController {
     public ResponseEntity<String> check(HttpServletRequest request) {
         String token = request.getHeader("Authorization").replace("Bearer: ", "");
         String tokencheck = AuthorizationService.verifyToken(token);
-        if (tokencheck != null){
+        if (tokencheck != null) {
             return ResponseEntity.status(200).body("token校验成功");
         }
         return ResponseEntity.status(401).body("token校验失败");

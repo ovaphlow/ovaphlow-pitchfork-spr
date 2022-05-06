@@ -11,7 +11,10 @@ import ovaphlow.pitchfork.spr.utility.Snowflake;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/simple/biz")
@@ -87,18 +90,18 @@ public class DocumentController {
 
     @RequestMapping(path = "/document/today", method = RequestMethod.GET)
     public ResponseEntity<Long> CountNumberForDay() {
-        Date date =new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = sdf.format(date);
-        Calendar cd=Calendar.getInstance();
-        try{
+        Calendar cd = Calendar.getInstance();
+        try {
             cd.setTime(sdf.parse(dateString));
-        }catch(ParseException e){
+        } catch (ParseException e) {
             e.printStackTrace();
         }
-        cd.add(Calendar.DATE,1);
+        cd.add(Calendar.DATE, 1);
         String dateString2 = sdf.format(cd.getTime());
-        Long CountNumber = documentMapper.CountDataForDay(dateString , dateString2);
+        Long CountNumber = documentMapper.CountDataForDay(dateString, dateString2);
         return ResponseEntity.status(200).body(CountNumber);
     }
 
