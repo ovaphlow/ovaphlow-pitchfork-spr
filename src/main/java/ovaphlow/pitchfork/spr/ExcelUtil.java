@@ -1,38 +1,25 @@
 package ovaphlow.pitchfork.spr;
 
-        import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-        import org.apache.poi.ss.usermodel.*;
-        import org.apache.poi.xssf.usermodel.XSSFCell;
-        import org.apache.poi.xssf.usermodel.XSSFRow;
-        import org.apache.poi.xssf.usermodel.XSSFSheet;
-        import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-        import org.springframework.web.multipart.MultipartFile;
-        import ovaphlow.pitchfork.spr.entity.User;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.web.multipart.MultipartFile;
+import ovaphlow.pitchfork.spr.entity.User;
 
-        import java.io.FileInputStream;
-        import java.io.IOException;
-        import java.io.InputStream;
-        import java.text.DecimalFormat;
-        import java.text.SimpleDateFormat;
-        import java.util.ArrayList;
-        import java.util.HashMap;
-        import java.util.List;
-        import java.util.Map;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ExcelUtil {
 
     public static List<User> xlsxImportExcel(MultipartFile file) throws IOException {
-
         XSSFWorkbook xwb = new XSSFWorkbook(file.getInputStream()); //获取excel工作簿
-
         XSSFSheet xssfSheet = xwb.getSheetAt(0); //获取excel的sheet
-
         if (xssfSheet == null) {
             return null;
         }
-
         List<User> list = new ArrayList<User>();
-
         //循环获取excel每一行
         for (int rowNum = 1; rowNum < xssfSheet.getLastRowNum() + 1; rowNum++) {
             XSSFRow xssfRow = xssfSheet.getRow(rowNum);
@@ -46,8 +33,6 @@ public class ExcelUtil {
                 if (xssCell == null) {
                     continue;
                 }
-
-
                 switch (cellNum) {
                     case 0:
                         user.setName(String.valueOf(getXSSFValue(xssCell)));
@@ -56,7 +41,6 @@ public class ExcelUtil {
                         user.setPhone(String.valueOf(getXSSFValue(xssCell)));
                         break;
                 }
-
             }
             list.add(user);  //将excel每一行的数据封装到user对象,并将user对象添加到list
         }
@@ -88,7 +72,4 @@ public class ExcelUtil {
         }*/
         return result;
     }
-
-
 }
-

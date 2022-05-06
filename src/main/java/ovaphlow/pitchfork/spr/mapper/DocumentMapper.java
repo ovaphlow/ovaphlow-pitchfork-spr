@@ -1,3 +1,6 @@
+// repository - entity
+// mapper - domain
+// dao - pojo
 package ovaphlow.pitchfork.spr.mapper;
 
 import org.apache.ibatis.annotations.*;
@@ -98,15 +101,15 @@ public interface DocumentMapper {
     Map<String, Object> CountPercent1();
 
     @Select("""
-            select count(*) 计划外作业数量 , 
-            concat(count(*) *100 / (select count(*) from pitchfork.document),'%') 计划外作业占比
+            select count(*) 计划外作业数量 ,
+                concat(count(*) *100 / (select count(*) from pitchfork.document),'%') 计划外作业占比
             from pitchfork.document
             where tag @> '["计划外作业"]'
             """)
     Map<String, Object> CountPercent2();
 
     @Select("""
-            select count(*) 计划内作业数量 , 
+            select count(*) 计划内作业数量 ,
             concat(count(*) *100 / (select count(*) from pitchfork.document),'%') 计划内作业占比
             from pitchfork.document
             where tag @> '["计划内作业"]'

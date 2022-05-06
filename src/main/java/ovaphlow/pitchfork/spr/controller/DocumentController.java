@@ -1,6 +1,8 @@
+/**
+ * 控制层
+ */
 package ovaphlow.pitchfork.spr.controller;
 
-import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,13 +24,12 @@ import java.util.Map;
 public class DocumentController {
 
     private final DocumentMapper documentMapper;
-    Document document;
-    @Autowired
-    private RedisUtil redisUtil;
-
     public DocumentController(DocumentMapper documentMapper) {
         this.documentMapper = documentMapper;
     }
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     @RequestMapping(value = "/document/stats", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> stats(@RequestParam(value = "option", defaultValue = "") String option) {
@@ -47,6 +48,7 @@ public class DocumentController {
 
     @RequestMapping(path = "/document/{id}", method = RequestMethod.GET)
     public ResponseEntity<Document> getById(@PathVariable("id") Long id) {
+        Document document;
         String key = "document" + id;
         if (redisUtil.hasKey(key)) {
             document = (Document) redisUtil.get(key);

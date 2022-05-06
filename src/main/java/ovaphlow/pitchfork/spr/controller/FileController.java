@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ovaphlow.pitchfork.spr.ExcelUtil;
 import ovaphlow.pitchfork.spr.entity.User;
+import ovaphlow.pitchfork.spr.service.impl.ExcelServiceImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +17,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/simple")
 public class FileController {
+
+    private final ExcelServiceImpl excelService;
+
+    public FileController(ExcelServiceImpl excelService) {
+        this.excelService = excelService;
+    }
 
     @RequestMapping(path = "/upload", method = RequestMethod.POST)
     public ResponseEntity<String> upload(@RequestBody MultipartFile file) throws IOException {
@@ -36,8 +43,7 @@ public class FileController {
     @RequestMapping(path = "/excel", method = RequestMethod.POST)
     public ResponseEntity<List<User>> excel(@RequestBody MultipartFile file) throws IOException {
         List<User> users = ExcelUtil.xlsxImportExcel(file);
+        excelService.parseExcel(file);
         return ResponseEntity.status(200).body(users);
     }
-
-
 }
