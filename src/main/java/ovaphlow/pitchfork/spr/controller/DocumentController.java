@@ -1,5 +1,6 @@
 package ovaphlow.pitchfork.spr.controller;
 
+import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,15 @@ public class DocumentController {
 
     public DocumentController(DocumentMapper documentMapper) {
         this.documentMapper = documentMapper;
+    }
+
+    @RequestMapping(value = "/document/stats", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, Object>> stats(@RequestParam(value = "option", defaultValue = "") String option) {
+        if ("statsCountTotal".equals(option)) {
+            Map<String, Object> result = documentMapper.statsCountTotal();
+            return ResponseEntity.status(200).body(result);
+        }
+        return ResponseEntity.status(200).build();
     }
 
     @RequestMapping(path = "/document/{id}/{title}", method = RequestMethod.GET)

@@ -9,6 +9,8 @@ import java.util.Map;
 @Mapper
 public interface DocumentMapper {
 
+    Map<String, Object> statsCountTotal();
+
     @Select("""
             select id, time_begin timeBegin, time_end timeEnd, train, title, tag, detail, approve, review, sub01, sub02, sub03, sub04
             from pitchfork.document
