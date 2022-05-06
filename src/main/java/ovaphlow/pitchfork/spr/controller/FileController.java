@@ -43,7 +43,7 @@ public class FileController {
     @RequestMapping(path = "/excel", method = RequestMethod.POST)
     public ResponseEntity<List<User>> excel(@RequestBody MultipartFile file) throws IOException {
         List<User> users = ExcelUtil.xlsxImportExcel(file);
-        excelService.parseExcel(file);
+        // 调用ExcelService->ScheduleMapper->保存到数据库
         return ResponseEntity.status(200).body(users);
     }
 }
