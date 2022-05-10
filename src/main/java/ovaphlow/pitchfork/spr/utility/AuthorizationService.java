@@ -1,4 +1,4 @@
-package ovaphlow.pitchfork.spr;
+package ovaphlow.pitchfork.spr.utility;
 
 import org.jose4j.json.JsonUtil;
 import org.jose4j.jwk.RsaJsonWebKey;

@@ -2,7 +2,7 @@ package ovaphlow.pitchfork.spr.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ovaphlow.pitchfork.spr.AuthorizationService;
+import ovaphlow.pitchfork.spr.utility.AuthorizationService;
 import ovaphlow.pitchfork.spr.entity.User;
 import ovaphlow.pitchfork.spr.mapper.UserMapper;
 import ovaphlow.pitchfork.spr.utility.SecureText;

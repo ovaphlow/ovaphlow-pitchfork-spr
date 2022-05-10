@@ -95,32 +95,19 @@ public interface DocumentMapper {
     List<Map<String, Object>> CountNumberForTrain();
 
     @Select("""
-            select count(*) 总数量
-            from pitchfork.document
-            """)
-    Map<String, Object> CountPercent1();
+            select count(*)
 
-    @Select("""
-            select count(*) 计划外作业数量 ,
-                concat(count(*) *100 / (select count(*) from pitchfork.document),'%') 计划外作业占比
             from pitchfork.document
             where tag @> '["计划外作业"]'
             """)
-    Map<String, Object> CountPercent2();
+    Long CountPercent2();
 
     @Select("""
-            select count(*) 计划内作业数量 ,
-            concat(count(*) *100 / (select count(*) from pitchfork.document),'%') 计划内作业占比
+            select count(*)
             from pitchfork.document
             where tag @> '["计划内作业"]'
             """)
-    Map<String, Object> CountPercent3();
+    Long CountPercent3();
 
-//    @Select("""
-//            select count(*) 总数,
-//            round((select count(*) from pitchfork.document where tag @> '["计划内作业"]')/count(*)*100 ,3 )计划内作业
-//            from pitchfork.document
-//            """)
-//    List<Map<String, Object>> CountPercent();
 
 }

@@ -1,4 +1,4 @@
-package ovaphlow.pitchfork.spr;
+package ovaphlow.pitchfork.spr.utility;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
