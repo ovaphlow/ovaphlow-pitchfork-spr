@@ -6,7 +6,7 @@ package ovaphlow.pitchfork.spr.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ovaphlow.pitchfork.spr.RedisUtil;
+import ovaphlow.pitchfork.spr.utility.RedisUtil;
 import ovaphlow.pitchfork.spr.entity.Document;
 import ovaphlow.pitchfork.spr.mapper.DocumentMapper;
 import ovaphlow.pitchfork.spr.utility.Snowflake;
@@ -14,10 +14,7 @@ import ovaphlow.pitchfork.spr.utility.Snowflake;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/simple/biz")
@@ -137,12 +134,16 @@ public class DocumentController {
 
     @RequestMapping(path = "/document/percent", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> CountPercent() {
-        Map<String, Object> CountPercent1 = documentMapper.CountPercent1();
-        Map<String, Object> CountPercent2 = documentMapper.CountPercent2();
-        Map<String, Object> CountPercent3 = documentMapper.CountPercent3();
-        CountPercent2.putAll(CountPercent3);
-        CountPercent2.putAll(CountPercent1);
-        return ResponseEntity.status(200).body(CountPercent2);
+        float Count2 = documentMapper.CountPercent2(); //计划外作业
+        float Count3 = documentMapper.CountPercent3(); //计划内作业
+        float CountAll  =(Count2 + Count3);
+        Long Precent2 =(long)(Count2/CountAll*100);
+        Long Precent3 =(long)(Count3/CountAll*100);
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("总数",CountAll);
+        map.put("计划外作业占比",Precent2);
+        map.put("计划内作业占比",Precent3);
+        return ResponseEntity.status(200).body(map);
     }
 
 }

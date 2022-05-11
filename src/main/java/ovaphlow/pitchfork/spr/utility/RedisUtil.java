@@ -1,4 +1,4 @@
-package ovaphlow.pitchfork.spr;
+package ovaphlow.pitchfork.spr.utility;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

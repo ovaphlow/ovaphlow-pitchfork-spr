@@ -6,24 +6,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import ovaphlow.pitchfork.spr.ExcelUtil;
-import ovaphlow.pitchfork.spr.entity.User;
+import ovaphlow.pitchfork.spr.entity.Schedule;
 import ovaphlow.pitchfork.spr.service.impl.ExcelServiceImpl;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/simple")
 public class FileController {
 
     private final ExcelServiceImpl excelService;
-
     public FileController(ExcelServiceImpl excelService) {
         this.excelService = excelService;
     }
-
     @RequestMapping(path = "/upload", method = RequestMethod.POST)
     public ResponseEntity<String> upload(@RequestBody MultipartFile file) throws IOException {
         String oldName = file.getOriginalFilename();
@@ -41,9 +38,27 @@ public class FileController {
     }
 
     @RequestMapping(path = "/excel", method = RequestMethod.POST)
-    public ResponseEntity<List<User>> excel(@RequestBody MultipartFile file) throws IOException {
-        List<User> users = ExcelUtil.xlsxImportExcel(file);
+    public ResponseEntity<List<Schedule>> excel(@RequestBody MultipartFile file) throws IOException {
         // 调用ExcelService->ScheduleMapper->保存到数据库
-        return ResponseEntity.status(200).body(users);
+        List<Schedule> schedule = excelService.parseExcel(file);
+        System.out.println(schedule);
+        excelService.ExcelInsert(schedule);
+        return ResponseEntity.status(200).body(schedule);
     }
+
+    @RequestMapping(path = "/excel/get", method = RequestMethod.GET)
+    public ResponseEntity<List<Schedule>> excel1(@RequestBody MultipartFile file) throws IOException {
+        List<Schedule> schedule = excelService.parseExcel(file);
+        return ResponseEntity.status(200).body(schedule);
+    }
+
+    @RequestMapping(path = "/excel", method = RequestMethod.GET)
+    public ResponseEntity<List<Schedule>> Findexcel(){
+        List<Schedule> schedule = excelService.FindExcel();
+        // 调用ExcelService->ScheduleMapper->保存到数据库
+        return ResponseEntity.status(200).body(schedule);
+    }
+
+
+
 }
