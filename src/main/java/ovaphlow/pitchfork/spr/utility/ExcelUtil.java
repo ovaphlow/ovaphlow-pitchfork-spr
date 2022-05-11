@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ovaphlow.pitchfork.spr.entity.Schedule;
 
 import java.io.IOException;
-import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +54,7 @@ public class ExcelUtil {
                         break;
                 }
             }
-            list.add(schedule);  //将excel每一行的数据封装到user对象,并将user对象添加到list
+            list.add(schedule);  //将excel每一行的数据封装到schedule对象,并将schedule对象添加到list
         }
         return list;
     }

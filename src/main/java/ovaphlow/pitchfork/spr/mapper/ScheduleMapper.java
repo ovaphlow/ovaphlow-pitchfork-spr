@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.*;
 import ovaphlow.pitchfork.spr.entity.Schedule;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface ScheduleMapper {
@@ -14,10 +15,9 @@ public interface ScheduleMapper {
             """)
     void ExcelInsert(List<Schedule> schedule);
 
-    @Select("""
+    @Select(""" 
             select *, time_begin timeBegin, time_end timeEnd
-            from pitchfork.Schedule
+            from pitchfork.schedule
             """)
     List<Schedule> SearchAll();
-
 }
