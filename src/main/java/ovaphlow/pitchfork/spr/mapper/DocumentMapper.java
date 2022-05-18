@@ -12,7 +12,7 @@ import java.util.Map;
 @Mapper
 public interface DocumentMapper {
     @Select("""
-        select count(*)  from pitchfork.document
+        select count(*) from pitchfork.document
         """)
     Map<String, Object> statsCountTotal();
 
