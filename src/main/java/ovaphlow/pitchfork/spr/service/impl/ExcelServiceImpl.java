@@ -22,7 +22,7 @@ public class ExcelServiceImpl implements ExcelService {
     }
 
     @Override
-    public void ExcelInsert(List<Schedule> schedule){
+    public void ExcelInsert(Schedule schedule){
         scheduleMapper.ExcelInsert(schedule);
     }
 
