@@ -4,12 +4,14 @@
 package ovaphlow.pitchfork.spr.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ovaphlow.pitchfork.spr.utility.RedisUtil;
 import ovaphlow.pitchfork.spr.entity.Document;
 import ovaphlow.pitchfork.spr.mapper.DocumentMapper;
 import ovaphlow.pitchfork.spr.utility.Snowflake;
+import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
@@ -21,6 +23,7 @@ import java.util.*;
 public class DocumentController {
 
     private final DocumentMapper documentMapper;
+
     public DocumentController(DocumentMapper documentMapper) {
         this.documentMapper = documentMapper;
     }
@@ -47,13 +50,24 @@ public class DocumentController {
     public ResponseEntity<Document> getById(@PathVariable("id") Long id) {
         Document document;
         String key = "document" + id;
-        if (redisUtil.hasKey(key)) {
-            document = (Document) redisUtil.get(key);
-        } else {
+        try {
+            Jedis jedis = new Jedis("127.0.0.1", 6379);
+            String ping = jedis.ping();
+            if (ping.equalsIgnoreCase("PONG")) {
+                if (redisUtil.hasKey(key)) {
+                    document = (Document) redisUtil.get(key);
+                    return ResponseEntity.status(200).body(document);
+                } else {
+                    document = documentMapper.filterById(id);
+                    redisUtil.set(key, document);
+                    return ResponseEntity.status(200).body(document);
+                }
+            }
+        } catch (Exception e) {
             document = documentMapper.filterById(id);
-            redisUtil.set(key, document);
+            return ResponseEntity.status(200).body(document);
         }
-        return ResponseEntity.status(200).body(document);
+        return ResponseEntity.status(200).build();
     }
 
     // 技术员审核 需要前端提交 审核结果 班组 质检 审核状态（技术员审核） 技术员id 姓名 审核时间
@@ -136,13 +150,13 @@ public class DocumentController {
     public ResponseEntity<Map<String, Object>> CountPercent() {
         float Count2 = documentMapper.CountPercent2(); //计划外作业
         float Count3 = documentMapper.CountPercent3(); //计划内作业
-        float CountAll  =(Count2 + Count3);
-        Long Precent2 =(long)(Count2/CountAll*100);
-        Long Precent3 =(long)(Count3/CountAll*100);
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("总数",CountAll);
-        map.put("计划外作业占比",Precent2);
-        map.put("计划内作业占比",Precent3);
+        float CountAll = (Count2 + Count3);
+        Long Precent2 = (long) (Count2 / CountAll * 100);
+        Long Precent3 = (long) (Count3 / CountAll * 100);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("总数", CountAll);
+        map.put("计划外作业占比", Precent2);
+        map.put("计划内作业占比", Precent3);
         return ResponseEntity.status(200).body(map);
     }
 

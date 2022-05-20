@@ -24,7 +24,6 @@ public class Schedule {
     String timeEnd;
     String dept;
     String detail;
-    String tag;
 
     @Override
     public String toString() {
@@ -35,26 +34,18 @@ public class Schedule {
                 ", timeEnd='" + timeEnd + '\'' +
                 ", dept='" + dept + '\'' +
                 ", detail='" + detail + '\'' +
-                ", tag='" + tag + '\'' +
                 '}';
     }
 
-    public String getTag() {
-        return tag;
-    }
 
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
 
-    public Schedule(long id, String train, String timeBegin, String timeEnd, String dept, String detail, String tag) {
+    public Schedule(long id, String train, String timeBegin, String timeEnd, String dept, String detail) {
         this.id = id;
         this.train = train;
         this.timeBegin = timeBegin;
         this.timeEnd = timeEnd;
         this.dept = dept;
         this.detail = detail;
-        this.tag = tag;
     }
 
     public long getId() {

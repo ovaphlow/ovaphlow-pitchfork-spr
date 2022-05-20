@@ -52,9 +52,7 @@ public class ExcelUtil {
                     case 5:
                         schedule.setDetail(String.valueOf(getXSSFValue(xssCell)));
                         break;
-                    case 6:
-                        schedule.setTag(String.valueOf(getXSSFValue(xssCell)));
-                        break;
+
                 }
             }
             list.add(schedule);  //将excel每一行的数据封装到schedule对象,并将schedule对象添加到list
