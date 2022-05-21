@@ -11,9 +11,9 @@ public interface ScheduleMapper {
 
     @Insert("""
             insert into pitchfork.schedule (id, train, time_begin, time_end, dept, detail)
-                values (#{id}, #{train}, to_date(#{time_begin},'yyyy-MM-dd hh24:mi:ss'), to_date(#{time_end},'yyyy-MM-dd hh24:mi:ss'),#{dept}, #{detail}::jsonb)
+                values (#{id}, #{train}, to_date(#{timeBegin},'yyyy-MM-dd hh24:mi:ss'), to_date(#{timeEnd},'yyyy-MM-dd hh24:mi:ss'), #{dept}, #{detail}::jsonb)
             """)
-    void ExcelInsert(List<Schedule> schedule);
+    void ExcelInsert(Schedule schedule);
 
     @Select(""" 
             select *, time_begin timeBegin, time_end timeEnd

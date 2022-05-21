@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ovaphlow.pitchfork.spr.entity.Schedule;
 import ovaphlow.pitchfork.spr.service.impl.ExcelServiceImpl;
+import ovaphlow.pitchfork.spr.utility.Snowflake;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -42,7 +44,13 @@ public class FileController {
         // 调用ExcelService->ScheduleMapper->保存到数据库
         List<Schedule> schedule = excelService.parseExcel(file);
         System.out.println(schedule);
-        excelService.ExcelInsert(schedule);
+
+        for (int i = 0; i < schedule.size(); i++) {
+            Schedule map = schedule.get(i);
+            Snowflake flakeId = new Snowflake(1, 1, 1);
+            map.setId(flakeId.nextId());
+            excelService.ExcelInsert(map);
+        }
         return ResponseEntity.status(200).body(schedule);
     }
 

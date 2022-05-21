@@ -20,5 +20,5 @@ public interface ExcelService {
 
     List<Schedule> parseExcel(MultipartFile file) throws IOException;
     List<Schedule> FindExcel();
-    void ExcelInsert(List<Schedule> schedule);
+    void ExcelInsert(Schedule schedule);
 }
