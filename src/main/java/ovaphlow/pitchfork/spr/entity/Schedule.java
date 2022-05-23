@@ -25,7 +25,6 @@ public class Schedule {
     String dept;
     String detail;
 
-
     @Override
     public String toString() {
         return "Schedule{" +
@@ -36,6 +35,17 @@ public class Schedule {
                 ", dept='" + dept + '\'' +
                 ", detail='" + detail + '\'' +
                 '}';
+    }
+
+
+
+    public Schedule(long id, String train, String timeBegin, String timeEnd, String dept, String detail) {
+        this.id = id;
+        this.train = train;
+        this.timeBegin = timeBegin;
+        this.timeEnd = timeEnd;
+        this.dept = dept;
+        this.detail = detail;
     }
 
     public long getId() {
@@ -83,15 +93,6 @@ public class Schedule {
     }
 
     public void setDetail(String detail) {
-        this.detail = detail;
-    }
-
-    public Schedule(long id, String train, String timeBegin, String timeEnd, String dept, String detail) {
-        this.id = id;
-        this.train = train;
-        this.timeBegin = timeBegin;
-        this.timeEnd = timeEnd;
-        this.dept = dept;
         this.detail = detail;
     }
 
