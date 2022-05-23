@@ -28,6 +28,15 @@ public class DocumentController {
     @Autowired
     private RedisUtil redisUtil;
 
+    @RequestMapping(value = "/document/q", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, Object>> q(@RequestParam(value = "option", defaultValue = "") String option) {
+        if ("lianxi".equals(option)) {
+            Map<String, Object> result = documentMapper.lianxi();
+            return ResponseEntity.status(200).body(result);
+        }
+        return ResponseEntity.status(200).build();
+    }
+
     @RequestMapping(value = "/document/stats", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> stats(@RequestParam(value = "option", defaultValue = "") String option) {
         if ("statsCountTotal".equals(option)) {

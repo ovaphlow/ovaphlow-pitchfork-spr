@@ -20,4 +20,9 @@ public interface ScheduleMapper {
             from pitchfork.schedule
             """)
     List<Schedule> SearchAll();
+    @Select("""
+            select count(*) from pitchfork.schedule
+            where time_begin between '2022-05-16' and '2022-05-17'
+            """)
+    Map<String, Object> xx();
 }
