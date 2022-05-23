@@ -12,6 +12,15 @@ import java.util.Map;
 @Mapper
 public interface DocumentMapper {
 
+    @Select("""
+            select count(*) from pitchfork.document
+            where time_begin between '2022-05-16' and '2022-05-17'
+            """)
+    Map<String, Object> lianxi();
+
+    @Select("""
+            select count(*) from pitchfork.document
+            """)
     Map<String, Object> statsCountTotal();
 
     @Select("""
