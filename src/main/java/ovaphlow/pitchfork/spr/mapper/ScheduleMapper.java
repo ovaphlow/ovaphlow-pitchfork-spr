@@ -1,7 +1,8 @@
 package ovaphlow.pitchfork.spr.mapper;
 
-import org.apache.ibatis.annotations.*;
-import ovaphlow.pitchfork.spr.entity.Document;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import ovaphlow.pitchfork.spr.entity.Schedule;
 
 import java.util.List;
@@ -15,8 +16,16 @@ public interface ScheduleMapper {
     List<Schedule> jx();
 
     @Insert("""
-            insert into pitchfork.schedule (id, train, time_begin, time_end, dept, detail)
-                values (#{id}, #{train}, to_date(#{timeBegin},'yyyy-MM-dd hh24:mi:ss'), to_date(#{timeEnd},'yyyy-MM-dd hh24:mi:ss'), #{dept}, #{detail}::jsonb)
+            insert into pitchfork.schedule (
+                id, train, time_begin, time_end, dept, detail
+            ) values (
+                #{id},
+                #{train},
+                to_date(#{timeBegin}, 'yyyy-MM-dd hh24:mi:ss'),
+                to_date(#{timeEnd}, 'yyyy-MM-dd hh24:mi:ss'),
+                #{dept},
+                #{detail}::jsonb
+            )
             """)
     void ExcelInsert(Schedule schedule);
 
@@ -25,9 +34,11 @@ public interface ScheduleMapper {
             from pitchfork.schedule
             """)
     List<Schedule> SearchAll();
+
     @Select("""
-            select count(*) ,time_begin timeBegin , time_end timeEnd from pitchfork.schedule
-            where time_begin between #{timeBegin} and #{timeEnd}
+            select count(*) qty
+            from pitchfork.schedule
+            where to_char(time_begin, 'YYYY-MM-DD') = #{date}
             """)
-    List<Schedule> filterBySearch(String timeBegin, String timeEnd);
+    Map<String, Object> filterBySearch(String date);
 }

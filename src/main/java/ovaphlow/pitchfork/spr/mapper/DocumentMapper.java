@@ -1,6 +1,3 @@
-// repository - entity
-// mapper - domain
-// dao - pojo
 package ovaphlow.pitchfork.spr.mapper;
 
 import org.apache.ibatis.annotations.*;
@@ -69,19 +66,46 @@ public interface DocumentMapper {
     Document filterById(Long id);
 
     @Insert("""
-            insert into pitchfork.document (id, time_begin, time_end, train, title, tag, detail, approve, review, sub01, sub02, sub03, sub04)
-                values (#{id}, #{timeBegin}, #{timeEnd}, #{train}, #{title}, #{tag}::jsonb, #{detail}::jsonb
-                , #{approve}::jsonb, #{review}::jsonb, #{sub01}::jsonb, #{sub02}::jsonb, #{sub03}::jsonb, #{sub04}::jsonb)
+            insert into pitchfork.document (
+                id
+                , time_begin
+                , time_end
+                , train
+                , title
+                , tag
+                , detail
+                , approve
+                , review
+                , sub01
+                , sub02
+                , sub03
+                , sub04
+            ) values (
+                #{id}
+                , #{timeBegin}
+                , #{timeEnd}
+                , #{train}
+                , #{title}
+                , #{tag}::jsonb
+                , #{detail}::jsonb
+                , #{approve}::jsonb
+                , #{review}::jsonb
+                , #{sub01}::jsonb
+                , #{sub02}::jsonb
+                , #{sub03}::jsonb
+                , #{sub04}::jsonb
+            )
             """)
     void save(Document data);
 
     @Select("""
             select *, time_begin timeBegin, time_end timeEnd from pitchfork.document where id = #{id} and title = #{title}
             """)
-    Document filterByIdTitle(Long id,String title);
+    Document filterByIdTitle(Long id, String title);
 
     @Select("""
-            select count(*) from pitchfork.document
+            select count(*) qty
+            from pitchfork.document
             where time_begin between #{timeBegin} and #{timeEnd}
             """)
     Long CountDataForDay(String timeBegin, String timeEnd);
