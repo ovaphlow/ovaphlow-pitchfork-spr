@@ -1,6 +1,7 @@
 package ovaphlow.pitchfork.spr.mapper;
 
 import org.apache.ibatis.annotations.*;
+import ovaphlow.pitchfork.spr.entity.Document;
 import ovaphlow.pitchfork.spr.entity.Schedule;
 
 import java.util.List;
@@ -8,6 +9,10 @@ import java.util.Map;
 
 @Mapper
 public interface ScheduleMapper {
+    @Select("""
+            select * from pitchfork.schedule
+            """)
+    List<Schedule> jx();
 
     @Insert("""
             insert into pitchfork.schedule (id, train, time_begin, time_end, dept, detail)
@@ -21,8 +26,8 @@ public interface ScheduleMapper {
             """)
     List<Schedule> SearchAll();
     @Select("""
-            select count(*) from pitchfork.schedule
-            where time_begin between '2022-05-16' and '2022-05-17'
+            select count(*) ,time_begin timeBegin , time_end timeEnd from pitchfork.schedule
+            where time_begin between #{timeBegin} and #{timeEnd}
             """)
-    Map<String, Object> xx();
+    List<Schedule> filterBySearch(String timeBegin, String timeEnd);
 }
