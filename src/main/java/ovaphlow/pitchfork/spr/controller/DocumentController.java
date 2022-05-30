@@ -30,6 +30,21 @@ public class DocumentController {
 
     @Autowired
     private RedisUtil redisUtil;
+    @RequestMapping(path = "/document/ee", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, Object>> fty(
+            @RequestParam(value = "option", defaultValue = "") String option,
+            HttpServletRequest request
+    ) {
+        System.out.println(option);
+        if ("opi".equals(option)) {
+            System.out.println("走if了");
+            String date = request.getParameter("date");
+            Map<String , Object> result =documentMapper.Search(date);
+            return ResponseEntity.status(200).body(result);
+        }
+        System.out.println("没走if");
+        return ResponseEntity.status(200).body(Map.of("qwer", 0));
+    }
 
     @RequestMapping(value = "/document/q", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> q(@RequestParam(value = "option", defaultValue = "") String option) {
