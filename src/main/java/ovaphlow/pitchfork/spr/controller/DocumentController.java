@@ -39,7 +39,7 @@ public class DocumentController {
         if ("opi".equals(option)) {
             System.out.println("走if了");
             String date = request.getParameter("date");
-            Map<String , Object> result =documentMapper.Search(date);
+            Map<String , Object> result =documentMapper.Search(date + "%");
             return ResponseEntity.status(200).body(result);
         }
         System.out.println("没走if");

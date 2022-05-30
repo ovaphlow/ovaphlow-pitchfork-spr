@@ -11,7 +11,7 @@ public interface DocumentMapper {
     @Select("""
         select count(*) qwer
         from pitchfork.document
-        where time_begin = #{date}
+        where time_begin like #{date}
         """)
     Map<String, Object> Search(String date);
 
