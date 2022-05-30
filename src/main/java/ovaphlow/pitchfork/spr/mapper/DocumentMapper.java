@@ -8,6 +8,12 @@ import java.util.Map;
 
 @Mapper
 public interface DocumentMapper {
+    @Select("""
+        select count(*) qwer
+        from pitchfork.document
+        where time_begin = #{date}
+        """)
+    Map<String, Object> Search(String date);
 
     @Select("""
             select count(*) from pitchfork.document
