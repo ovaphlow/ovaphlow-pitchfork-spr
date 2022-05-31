@@ -34,7 +34,6 @@ public class DocumentController {
             @RequestParam(value = "option", defaultValue = "") String option,
             HttpServletRequest request
     ) {
-        System.out.println(option);
         if ("opi".equals(option)) {
             System.out.println("走if了");
             String date = request.getParameter("date");
