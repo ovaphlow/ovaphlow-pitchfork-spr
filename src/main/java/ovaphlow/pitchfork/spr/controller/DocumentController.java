@@ -4,12 +4,11 @@
 package ovaphlow.pitchfork.spr.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ovaphlow.pitchfork.spr.utility.RedisUtil;
 import ovaphlow.pitchfork.spr.entity.Document;
 import ovaphlow.pitchfork.spr.mapper.DocumentMapper;
+import ovaphlow.pitchfork.spr.utility.RedisUtil;
 import ovaphlow.pitchfork.spr.utility.Snowflake;
 import redis.clients.jedis.Jedis;
 
@@ -23,13 +22,13 @@ import java.util.*;
 public class DocumentController {
 
     private final DocumentMapper documentMapper;
+    @Autowired
+    private RedisUtil redisUtil;
 
     public DocumentController(DocumentMapper documentMapper) {
         this.documentMapper = documentMapper;
     }
 
-    @Autowired
-    private RedisUtil redisUtil;
     @RequestMapping(path = "/document/ee", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> fty(
             @RequestParam(value = "option", defaultValue = "") String option,
@@ -39,7 +38,7 @@ public class DocumentController {
         if ("opi".equals(option)) {
             System.out.println("走if了");
             String date = request.getParameter("date");
-            Map<String , Object> result =documentMapper.Search(date + "%");
+            Map<String, Object> result = documentMapper.Search(date + "%");
             return ResponseEntity.status(200).body(result);
         }
         System.out.println("没走if");
