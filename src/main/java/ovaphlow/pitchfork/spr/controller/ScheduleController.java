@@ -14,7 +14,6 @@ import ovaphlow.pitchfork.spr.mapper.ScheduleMapper;
 import ovaphlow.pitchfork.spr.utility.RedisUtil;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +22,7 @@ import java.util.Map;
 public class ScheduleController {
 
     private final ScheduleMapper scheduleMapper;
-    private Object request;
+
     @Autowired
     private RedisUtil redisUtil;
 

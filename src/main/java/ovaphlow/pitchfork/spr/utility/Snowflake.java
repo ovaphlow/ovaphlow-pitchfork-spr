@@ -67,7 +67,7 @@ public class Snowflake {
 
         long datacenterIdShift = sequenceBits + workerIdBits;
         //初始时间戳
-        long twepoch = 1649907083020L;
+        long twepoch = 1288834974657L;
         return ((timestamp - twepoch) << timestampLeftShift) |
                 (datacenterId << datacenterIdShift) |
                 (workerId << sequenceBits) |

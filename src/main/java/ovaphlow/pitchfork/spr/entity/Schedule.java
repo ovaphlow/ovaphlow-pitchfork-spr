@@ -1,4 +1,5 @@
 package ovaphlow.pitchfork.spr.entity;
+
 /*
 -- pitchfork.schedule definition
 
@@ -9,13 +10,14 @@ package ovaphlow.pitchfork.spr.entity;
 CREATE TABLE pitchfork.schedule (
 	id int8 NOT NULL,
 	train varchar NOT NULL,
-	time_begin timestamptz NOT NULL,
 	time_end timestamptz NOT NULL,
 	dept varchar NOT NULL,
 	detail jsonb NOT NULL,
-	CONSTRAINT newtable_pk PRIMARY KEY (id)
+	time_begin timestamptz NOT NULL,
+	CONSTRAINT schedule_pk PRIMARY KEY (id)
 );
-CREATE INDEX newtable_train_idx ON pitchfork.schedule USING btree (train); */
+CREATE INDEX schedule_train_idx ON pitchfork.schedule USING btree (train);
+ */
 
 public class Schedule {
     long id;

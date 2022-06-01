@@ -1,6 +1,32 @@
 package ovaphlow.pitchfork.spr.entity;
 
 import java.io.Serializable;
+/*
+-- pitchfork."document" definition
+
+-- Drop table
+
+-- DROP TABLE pitchfork."document";
+
+CREATE TABLE pitchfork."document" (
+	id bigserial NOT NULL,
+	title varchar NOT NULL DEFAULT ''::character varying,
+	time_begin varchar NOT NULL DEFAULT '2000-01-01 12:34:56+08'::timestamp with time zone,
+	time_end varchar NOT NULL DEFAULT '2000-01-01 12:34:56+08'::timestamp with time zone,
+	train varchar NOT NULL DEFAULT ''::character varying,
+	tag jsonb NOT NULL DEFAULT '[]'::jsonb,
+	detail jsonb NOT NULL DEFAULT '{}'::jsonb,
+	approve jsonb NOT NULL DEFAULT '{}'::jsonb,
+	review jsonb NOT NULL DEFAULT '{}'::jsonb,
+	sub01 jsonb NOT NULL DEFAULT '{}'::jsonb,
+	sub02 jsonb NOT NULL DEFAULT '[]'::jsonb,
+	sub03 jsonb NOT NULL DEFAULT '[]'::jsonb,
+	sub04 jsonb NOT NULL DEFAULT '{}'::jsonb,
+	CONSTRAINT document_pk PRIMARY KEY (id)
+);
+CREATE INDEX document_time_begin_idx ON pitchfork.document USING btree (time_begin);
+CREATE INDEX document_train_idx ON pitchfork.document USING btree (train);
+ */
 
 public class Document implements Serializable {
     Long id;
