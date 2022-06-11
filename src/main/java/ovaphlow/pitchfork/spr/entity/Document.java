@@ -1,6 +1,7 @@
 package ovaphlow.pitchfork.spr.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 /*
 -- pitchfork."document" definition
 
@@ -28,6 +29,7 @@ CREATE INDEX document_time_begin_idx ON pitchfork.document USING btree (time_beg
 CREATE INDEX document_train_idx ON pitchfork.document USING btree (train);
  */
 
+// POJO 类 简单Java对象
 public class Document implements Serializable {
     Long id;
     String train;
@@ -166,6 +168,19 @@ public class Document implements Serializable {
                 '}';
     }
 
-
-
+    public Document(Long id, String train, String timeBegin, String timeEnd, String title, String tag, String detail, String approve, String review, String sub01, String sub02, String sub03, String sub04) {
+        this.id = id;
+        this.train = train;
+        this.timeBegin = timeBegin;
+        this.timeEnd = timeEnd;
+        this.title = title;
+        this.tag = tag;
+        this.detail = detail;
+        this.approve = approve;
+        this.review = review;
+        this.sub01 = sub01;
+        this.sub02 = sub02;
+        this.sub03 = sub03;
+        this.sub04 = sub04;
+    }
 }

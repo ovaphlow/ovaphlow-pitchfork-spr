@@ -43,7 +43,7 @@ public interface DocumentMapper {
 
     @Update("""
             update pitchfork.document
-            set   time_begin = #{timeBegin}
+            set time_begin = #{timeBegin}
                 , time_end = #{timeEnd}
                 , train = #{train}
                 , title = #{title}
@@ -128,14 +128,14 @@ public interface DocumentMapper {
     Long CountDataForWorking();
 
     @Select("""
-            select train, count(train) 数量 from pitchfork.document
+            select train, count(train) 数量
+            from pitchfork.document
             group by train
             """)
     List<Map<String, Object>> CountNumberForTrain();
 
     @Select("""
             select count(*)
-
             from pitchfork.document
             where tag @> '["计划外作业"]'
             """)
